@@ -1,15 +1,20 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 
 class Subject(models.Model):
     """ Модель субъектов обучения. """
 
-    title = models.CharField(max_length=200, verbose_name='Тип субъекта')
+    title = models.CharField(
+        max_length=200,
+        verbose_name='Наименование предмета'
+    )
     slug = models.SlugField(max_length=200, unique=True)
 
     class Meta:
         ordering = ['title']
+        verbose_name = 'Предмет'
+        verbose_name_plural = 'Предметы'
 
     def __str__(self):
         return self.title
@@ -31,6 +36,8 @@ class Course(models.Model):
 
     class Meta:
         ordering = ['-created']
+        verbose_name = 'Курс'
+        verbose_name_plural = 'Курсы'
 
     def __str__(self):
         return self.title
@@ -50,6 +57,10 @@ class Module(models.Model):
         verbose_name='Наименование модуля'
     )
     description = models.TextField(blank=True, verbose_name='Описание модуля')
+
+    class Meta:
+        verbose_name = 'Модуль'
+        verbose_name_plural = 'Модули'
 
     def __str__(self):
         return self.title
