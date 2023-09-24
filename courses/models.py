@@ -33,6 +33,11 @@ class Course(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Создатель курса'
     )
+    subject = models.ForeignKey(
+        Subject,
+        related_name='courses',
+        on_delete=models.CASCADE
+    )
     title = models.CharField(max_length=200, verbose_name='Наименование курса')
     slug = models.SlugField(max_length=200, unique=True)
     overview = models.TextField(verbose_name='Описание курса')
