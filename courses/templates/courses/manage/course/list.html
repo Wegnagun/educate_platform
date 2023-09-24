@@ -1,0 +1,27 @@
+{% extends "base_.html" %}
+{% block title %}Мои курсы{% endblock %}
+{% block content %}
+  <h1>Курсы преподавателя:
+    {% if user.first_name != '' and user.last_name != '' %}
+      {{ user.first_name }} {{ user.first_name }}
+    {% else %}
+      {{ user.username }}
+    {% endif %}
+  </h1>
+  <div class="module">
+    {% for course in object_list %}
+      <div class="course-info">
+        <h3>{{ course.title }}</h3>
+        <p>
+          <a href="{% url "course_edit" course.id %}">Редактировать</a>
+          <a href="{% url "course_delete" course.id %}">Удалить</a>
+        </p>
+      </div>
+    {% empty %}
+      <p>У вас пока еще нет курсов.</p>
+    {% endfor %}
+    <p>
+      <a href="{% url "course_create" %}" class="button">Создать новый курс</a>
+    </p>
+  </div>
+{% endblock %}

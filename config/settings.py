@@ -1,6 +1,5 @@
 import os
 
-from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
 load_dotenv()
