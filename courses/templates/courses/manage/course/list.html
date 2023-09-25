@@ -3,7 +3,7 @@
 {% block content %}
   <h1>Курсы преподавателя:
     {% if user.first_name != '' and user.last_name != '' %}
-      {{ user.first_name }} {{ user.first_name }}
+      {{ user.first_name }} {{ user.last_name }}
     {% else %}
       {{ user.username }}
     {% endif %}
@@ -15,6 +15,7 @@
         <p>
           <a href="{% url "course_edit" course.id %}">Редактировать</a>
           <a href="{% url "course_delete" course.id %}">Удалить</a>
+          <a href="{% url "course_module_update" course.id %}">Редактировать модули</a>
         </p>
       </div>
     {% empty %}

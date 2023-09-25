@@ -1,0 +1,25 @@
+{% extends "base_.html" %}
+{% block title %}
+  {% if object %}
+    Редактировать уроки "{{ object.title }}"
+  {% else %}
+    Добавить новые уроки
+  {% endif %}
+{% endblock %}
+{% block content %}
+  <h1>
+    {% if object %}
+      Редактировать уроки "{{ object.title }}"
+    {% else %}
+      Добавить новые уроки
+    {% endif %}
+  </h1>
+  <div class="module">
+    <h2>Детали курса</h2>
+    <form action="" method="post" enctype="multipart/form-data">
+      {{ form.as_p }}
+      {% csrf_token %}
+      <p><input type="submit" value="Сохранить уроки"></p>
+    </form>
+  </div>
+{% endblock %}
