@@ -77,7 +77,8 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
     @staticmethod
     def get_model(model_name):
         if model_name in ['text', 'video', 'image', 'file']:
-            return apps.get_model(app_label='courses', model_name=model_name)
+            return apps.get_model(app_label='courses',
+                                  model_name=model_name)
         return None
 
     @staticmethod
@@ -119,15 +120,20 @@ class ContentCreateUpdateView(TemplateResponseMixin, View):
             data=request.POST,
             files=request.FILES
         )
-
         if form.is_valid():
             obj = form.save(commit=False)
             obj.owner = request.user
             obj.save()
             if not id:
-                Content.objects.create(module=self.module, item=obj)
+                Content.objects.create(
+                    module=self.module,
+                    item=obj
+                )
             return redirect('module_content_list', self.module.id)
-        return self.render_to_response({'form': form, 'object': self.obj})
+        return self.render_to_response({
+            'form': form,
+            'object': self.obj
+        })
 
 
 class ContentDeleteView(View):
@@ -147,7 +153,7 @@ class ContentDeleteView(View):
 
 
 class ModuleContentListView(TemplateResponseMixin, View):
-    """ Контроллер тображения всех модулей курса и уроков. """
+    """ Контроллер отображения всех модулей курса и уроков. """
     template_name = 'courses/manage/module/content_list.html'
 
     def get(self, request, module_id):

@@ -90,16 +90,16 @@ class Content(models.Model):
         on_delete=models.CASCADE,
         limit_choices_to={
             'model__in': (
-                'text',
-                'video',
-                'image',
-                'file'
+                'текст',
+                'видео',
+                'изображение',
+                'файл'
             )
         }
     )
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
-    order = OrderField(blank=True, for_fields='module')
+    order = OrderField(blank=True, for_fields=['module'])
 
     class Meta:
         ordering = ['order']
@@ -113,9 +113,18 @@ class ItemBase(models.Model):
         related_name='%(class)s_related',
         on_delete=models.CASCADE
     )
-    title = models.CharField(max_length=250)
-    created = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
+    title = models.CharField(
+        max_length=250,
+        verbose_name='Заголовок'
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата создания'
+    )
+    update = models.DateTimeField(
+        auto_now=True,
+        verbose_name='Дата обновления'
+    )
 
     class Meta:
         abstract = True
@@ -126,19 +135,31 @@ class ItemBase(models.Model):
 
 class Text(ItemBase):
     """ Модель типа содержимого контента - текст. """
-    content = models.TextField()
+    content = models.TextField(verbose_name='Текст')
+
+    class Meta:
+        verbose_name = 'Текст'
 
 
 class File(ItemBase):
     """ Модель типа содержимого контента - файл. """
-    file = models.FileField(upload_to='files')
+    file = models.FileField(upload_to='files', verbose_name='Файл')
+
+    class Meta:
+        verbose_name = 'Файл'
 
 
 class Image(ItemBase):
     """ Модель типа содержимого контента - изображение. """
-    file = models.FileField(upload_to='images')
+    file = models.FileField(upload_to='images', verbose_name='Изображение')
+
+    class Meta:
+        verbose_name = 'Изображение'
 
 
 class Video(ItemBase):
     """ Модель типа содержимого контента - видео. """
-    url = models.URLField()
+    url = models.URLField(verbose_name='Ссылка на видео')
+
+    class Meta:
+        verbose_name = 'Видео'
