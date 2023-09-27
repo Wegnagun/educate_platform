@@ -1,9 +1,10 @@
+from braces.views import CsrfExemptMixin, JSONResponseMixin
+from django.apps import apps
+from django.forms.models import modelform_factory
 from django.shortcuts import redirect, get_object_or_404
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
-from django.forms.models import modelform_factory
-from django.apps import apps
 
 from .forms import ModuleFormSet
 from .mixins import OwnerCourseEditMixin, OwnerCourseMixin
@@ -164,3 +165,23 @@ class ModuleContentListView(TemplateResponseMixin, View):
         )
 
         return self.render_to_response({'module': module})
+
+
+class ModuleOrderView(CsrfExemptMixin, JSONResponseMixin, View):
+    """ Контроллер переопределения порядка модулей для 'Drag and Drop' """
+    def post(self, request):
+        for id, order in self.request_json.items():
+            Module.objects.filter(
+                id=id, course__owner=request.user).update(order=order)
+            return self.render_json_response({'saved': 'OK'})
+
+
+class ContentOrderView(CsrfExemptMixin, JSONResponseMixin, View):
+    """ Контроллер для упорядочивания """
+    def post(self, request):
+        for id, order in self.request_json.items():
+            Content.objects.filter(id=id,
+                                   module__course__owner=request.user) \
+                .update(order=order)
+        return self.render_json_response({'saved': 'OK'})
+
